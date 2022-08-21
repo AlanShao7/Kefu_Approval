@@ -1,7 +1,14 @@
 import time
 from selenium import webdriver
 from Create_customer.Crm_create import Creat_customers
-# import pywin32
+from selenium.webdriver.common.action_chains import ActionChains
+import clipboard
+from pynput.keyboard import Controller, Key
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+
 
 class Comn:
     """
@@ -36,6 +43,10 @@ class Comn:
 
 
     def register_crm(self):
+        """
+        注册账号
+        :return:
+        """
         self.login()
         self.driver.find_element_by_link_text('客户管理').click()
         #跳转到客户管理
@@ -67,6 +78,10 @@ class Comn:
         #点击确认按钮
 
     def add_custmoer_name(self):
+        """
+        添加客户法定名称
+        :return:
+        """
         self.login()
         self.driver.find_element_by_link_text('客户管理').click()
         #跳转到客户管理
@@ -85,6 +100,27 @@ class Comn:
         #点击确定
         self.driver.implicitly_wait(5)
         #进行必填输入
+
+
+        #先添加图片减少加载时间
+        pic = self.driver.find_element_by_xpath('//span[@class="ant-upload"]')
+        clipboard.copy(r'G:\Kefu\pic\1111111111111111111111111.png')
+        ActionChains(self.driver).click(pic).perform()
+        time.sleep(2)
+        #上传营业执照
+        kb = Controller()
+        # 实例化控制键盘
+        kb.pressed(Key.ctrl, 'v')
+        with kb.pressed(
+                Key.ctrl,
+                'v'
+        ):
+            pass
+        # 摁下黏贴
+        time.sleep(1)
+        with kb.pressed(Key.enter): pass
+        #摁下回车,上传文件成功
+
         self.driver.find_element_by_xpath('//input[@id="operational_industry_id"]').click()
         #点击二级行业
         self.driver.implicitly_wait(5)
@@ -100,8 +136,19 @@ class Comn:
         time.sleep(1)
         self.driver.find_element_by_xpath('//div[@label="北京市"]').click()
         #选择北京
+        self.driver.find_element_by_xpath('//input[@id="address"]').send_keys('公司地址')
+        #在公司地址输入
+        self.driver.find_element_by_xpath('//input[@id="contactName"]').send_keys('运营专用')
+        self.driver.find_element_by_xpath('//input[@id="contactPhone"]').send_keys('17300000006')
+        self.driver.find_element_by_xpath('//input[@id="email"]').send_keys('815@qq.com')
 
-        #上传营业执照
+        WebDriverWait(self.driver,5,0.5).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, '//img[@class="ant-image-img"]'))
+        )
+        #等待图片加载成功
+        self.driver.find_elements_by_xpath('//div[@class="ant-modal-footer"]/button')[1].click()
+
 
 if __name__ == '__main__':
     comn = Comn()
