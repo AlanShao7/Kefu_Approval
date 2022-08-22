@@ -24,8 +24,13 @@ def tochinese(data):
             data = data.replace(c, chinese_data_dict[c])
     return data
 
-def get_time():
-    return tochinese(time.strftime('%Y年%m月%d日%H时%M分%S秒'))
+    try:
+        ft = time.strftime('%Y年%m月%d日%H时%M分%S秒')
+    except UnicodeEncodeError as e:
+        print(e)
+    finally:
+        ft = time.strftime('%Y{y}%m{m}%d{d}%H{h}%M{f}%S{s}').format(y='年', m='月', d='日', h='时', f='分',s='秒')
+    return tochinese(ft)
 
 
 if __name__ == '__main__':

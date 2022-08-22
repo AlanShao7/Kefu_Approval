@@ -20,8 +20,9 @@ class Comn:
         初始化浏览器
         """
         self.driver = webdriver.Chrome()
-        self.name = '运营测试二零二二年零八月一九日一四时零七分三七秒'
+        self.name = '运营测试二零二二年零八月二二日一零时二五分零六秒'
         # self.name = Creat_customers().post_creat(1) #测试时不开启
+
 
     def login(self):
         """
@@ -32,7 +33,7 @@ class Comn:
         # 登录网站
         self.driver.implicitly_wait(5)
         # 隐式等待5s
-        self.driver.find_element_by_id('username').send_keys('17300000006')
+        self.driver.find_element_by_id('username').send_keys('15868718273')
         # 输入账号
         self.driver.find_element_by_id('password').send_keys('Ik123456')
         # 输入密码
@@ -40,7 +41,6 @@ class Comn:
         # 点击登录
         self.driver.implicitly_wait(5)
         # 隐式等待5s
-
 
     def register_crm(self):
         """
@@ -67,7 +67,7 @@ class Comn:
         self.driver.find_elements_by_xpath('//div[@class="rc-virtual-list-holder-inner"]/div')[3].click()
         #选择下拉框中的第四个励销CRM独立版创建
         self.driver.implicitly_wait(5)
-        self.driver.find_element_by_xpath('//input[@id="client_name"]').send_keys('这是账号名称')
+        self.driver.find_element_by_xpath('//input[@id="client_name"]').send_keys(self.name)
         # self.driver.find_element_by_xpath('//input[@id="client_name"]').send_keys(self.name)  先不请求接口
         #输入账号名称
         self.driver.find_element_by_xpath('//input[@id="name"]').send_keys('运营专用')
@@ -149,8 +149,28 @@ class Comn:
         #等待图片加载成功
         self.driver.find_elements_by_xpath('//div[@class="ant-modal-footer"]/button')[1].click()
 
+    def replenish_info(self):
+        #完善企业信息
+        self.login()
+        self.driver.find_element_by_link_text('客户管理').click()
+        #进入客户管理
+        self.driver.find_element_by_xpath('//tbody[@class="ant-table-tbody"]/tr[3]/td[3]/a').click()
+        #进入完善企业信息页面
+        time.sleep(1)
+        self.driver.find_element_by_xpath('//input[@id="name"]').send_keys(self.name)
+        time.sleep(1)
+        self.driver.find_element_by_xpath('//span[@class="ant-pro-select-item-option-content-light"]').click()
+        #选择刚才创建的客户法定名称
+        WebDriverWait(self.driver, 5, 0.5).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, '//img[@class="ant-image-img"]'))
+        )
+        # 等待图片加载成功
+        self.driver.find_elements_by_xpath('//div[@class="ant-modal-footer"]/button')[1].click()
+
 
 if __name__ == '__main__':
     comn = Comn()
     # comn.register_crm()
-    comn.add_custmoer_name()
+    # comn.add_custmoer_name()
+    comn.replenish_info()
