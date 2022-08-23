@@ -202,10 +202,68 @@ class Comn:
         # 特别说明
         self.driver.find_elements_by_xpath('//div[@class="ant-modal-footer"]/button')[1].click()
 
+    def bill_of_lading(self, x=0):
+        """
+        提单
+        默认为正常提单，无需业务审批
+        X=1时，需要业务审批
+        :return:
+        """
+        if x == 0 or x == 1:
+            self.login()
+            self.driver.find_element_by_link_text('客户管理').click()
+            # self.driver.implicitly_wait(5)
+            time.sleep(1)
+            # 隐式等待5s
+            self.driver.find_element_by_xpath('//tbody[@class="ant-table-tbody"]/tr[2]/td[last()]').click()
+            time.sleep(1)
+            # 点击操作按钮
+            self.driver.find_elements_by_xpath('//span[@class="ant-dropdown-menu-title-content"]')[0].click()
+            # 点击新价提单
+            time.sleep(1)
+
+            kb = Controller()
+            # 实例化控制键盘
+            pic = self.driver.find_element_by_xpath('//*[@id="base"]/div/div/div[6]/div[2]/div[2]/div/table/tbody/tr/td[1]/div/span/div/div[2]/div/div/span/div/div')
+            clipboard.copy(r'D:\Alan_Files\Kefu_Approval\pic\1111111111111111111111111.png')
+
+            ActionChains(self.driver).move_to_element(pic).perform()
+            ActionChains(self.driver).click(pic).perform()
+
+            time.sleep(2)
+            # 上传营业执照
+            kb.pressed(Key.ctrl, 'v')
+            with kb.pressed(
+                    Key.ctrl,
+                    'v'
+            ):
+                pass
+            time.sleep(10)
+            self.driver.quit()
+            # 摁下黏贴
+
+            self.driver.find_element_by_xpath('//input[@id="base_contract_type"]').click()
+            self.driver.implicitly_wait(5)
+            self.driver.find_elements_by_xpath('//div[@class="rc-virtual-list-holder-inner"]/div')[x].click()
+            # 选择非正常合同  除0外都是非正常合同
+            WebDriverWait(self.driver, 5, 0.5).until(
+                EC.visibility_of_element_located(
+                    (By.XPATH, '//div[@class="ant-upload-list-item-info"]'))
+            )
+            # 等待图片加载成功
+            self.driver.find_elements_by_xpath('//div[@class="ant-pro-footer-bar"]//button')[1].click()
+            # 点击下一步
+            if x == 1:
+                self.driver.implicitly_wait(5)
+                self.driver.find_element_by_xpath('//textarea[@id="approveForm_reason"]').send_keys('申请原因')
+                # 输入申请原因
+                self.driver.find_elements_by_xpath('//div[@class="ant-pro-footer-bar"]//button')[1].click()
+                # 点击下一步
 
 if __name__ == '__main__':
     comn = Comn()
     # comn.register_crm()
     # comn.add_custmoer_name()
     # comn.replenish_info()
-    comn.customer_summary()
+    # comn.customer_summary()
+    comn.bill_of_lading(x=1)
