@@ -20,8 +20,8 @@ class Comn:
         初始化浏览器
         """
         self.driver = webdriver.Chrome()
-        # self.name = '运营测试二零二二年零八月二二日一零时二五分零六秒'
-        self.name = Creat_customers().post_creat(1) #测试时不开启
+        self.name = '运营测试二零二二年零八月二二日一零时二五分零六秒'
+        # self.name = Creat_customers().post_creat(1) #测试时不开启
 
     def login(self):
         """
@@ -183,11 +183,29 @@ class Comn:
         self.driver.find_element_by_xpath('//tbody[@class="ant-table-tbody"]/tr[2]/td[last()]').click()
         time.sleep(1)
         self.driver.find_elements_by_xpath('//span[@class="ant-dropdown-menu-title-content"]')[0].click()
+        time.sleep(0.5)
+        self.driver.find_element_by_xpath('//input[@id="customer_address"]').send_keys('地址')
+        # 客户地址输入
+        self.driver.find_elements_by_xpath('//input[@class="ant-input"]')[4].send_keys('职位')
+        # 联系人的职位
+        self.driver.find_element_by_xpath('//textarea[@id="dep_num"]').send_keys('使用人员规模')
+        # 使用人员规模
+        self.driver.find_element_by_xpath('//textarea[@id="buy_reason"]').send_keys('客户需求及购买软件目的')
+        # 客户需求及购买软件目的
+        self.driver.find_element_by_xpath('//textarea[@id="problems"]').send_keys('客户当前业务潜在痛点/阻力')
+        # 客户当前业务潜在痛点/阻力
+        self.driver.find_element_by_xpath('//textarea[@id="business_process"]').send_keys('客户的业务流程及拓客方式')
+        # 客户的业务流程及拓客方式
+        self.driver.find_element_by_xpath('//textarea[@id="target_people"]').send_keys('客户目标群体')
+        # 客户目标群体
+        self.driver.find_element_by_xpath('//textarea[@id="special_note"]').send_keys('特别说明')
+        # 特别说明
+        self.driver.find_elements_by_xpath('//div[@class="ant-modal-footer"]/button')[1].click()
 
 
 if __name__ == '__main__':
     comn = Comn()
-    comn.register_crm()
-    comn.add_custmoer_name()
-    comn.replenish_info()
+    # comn.register_crm()
+    # comn.add_custmoer_name()
+    # comn.replenish_info()
     comn.customer_summary()
