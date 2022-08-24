@@ -84,7 +84,7 @@ class Comn:
         """
         self.register_crm()
         time.sleep(2)
-        self.driver.find_element_by_link_text('客户管理').click()
+        # self.driver.find_element_by_link_text('客户管理').click()
         # 跳转到客户管理
         self.driver.implicitly_wait(5)
         # 隐式等待5s
@@ -176,6 +176,11 @@ class Comn:
         )
         # 等待图片加载成功
         self.driver.find_elements_by_xpath('//div[@class="ant-modal-footer"]/button')[1].click()
+        WebDriverWait(self.driver, 10, 0.5).until_not(
+            EC.visibility_of_element_located(
+                (By.XPATH, '//img[@class="ant-image-img"]'))
+        )
+        # 等待弹窗关闭(等待图片消失)
 
     def customer_summary(self):
         """
@@ -183,17 +188,15 @@ class Comn:
         :return:
         """
         self.replenish_info()
-        time.sleep(2)
+        # self.login()
+        self.driver.implicitly_wait(5)
+        self.driver.refresh()
+        # 页面刷新
         # self.driver.find_element_by_link_text('客户管理').click()
-        # self.driver.implicitly_wait(5)
-        time.sleep(1)
+        time.sleep(5)
         # 隐式等待5s
         self.driver.find_element_by_xpath('//tbody[@class="ant-table-tbody"]/tr[2]/td[last()]').click()
-
-        WebDriverWait(self.driver, 10, 0.5).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, '//span[@class="ant-dropdown-menu-title-content"]'))
-        )
+        time.sleep(1)
         self.driver.find_elements_by_xpath('//span[@class="ant-dropdown-menu-title-content"]')[0].click()
         # 点击新价提单
         time.sleep(0.5)
@@ -215,6 +218,12 @@ class Comn:
         # 特别说明
         self.driver.find_elements_by_xpath('//div[@class="ant-modal-footer"]/button')[1].click()
 
+        WebDriverWait(self.driver, 10, 0.5).until_not(
+            EC.visibility_of_element_located(
+                (By.XPATH, '//textarea[@id="special_note"]'))
+        )
+        # 等待弹窗关闭(等待特别说明消失)
+
     def bill_of_lading(self, x=0):
         """
         提单
@@ -224,18 +233,16 @@ class Comn:
         """
         if x == 0 or x == 1:
             self.customer_summary()
-            time.sleep(2)
+            self.driver.implicitly_wait(5)
+            self.driver.refresh()
+            time.sleep(5)
             # self.driver.find_element_by_link_text('客户管理').click()
-            # self.driver.implicitly_wait(5)
-            time.sleep(1)
-            # 隐式等待5s
-            self.driver.find_element_by_xpath('//tbody[@class="ant-table-tbody"]/tr[2]/td[last()]').click()
-            time.sleep(2)
+            # self.driver.find_element_by_xpath('//tbody[@class="ant-table-tbody"]/tr[2]/td[last()]').click()
+            # time.sleep(2)
             # 点击操作按钮
-            self.driver.find_elements_by_xpath('//span[@class="ant-dropdown-menu-title-content"]')[0].click()
+            # self.driver.find_elements_by_xpath('//span[@class="ant-dropdown-menu-title-content"]')[0].click()
             # 点击新价提单
-
-            time.sleep(1)
+            # 走流程 不需要在列表页面点
 
             pic = self.driver.find_element_by_xpath('//*[@id="base"]/div/div/div[6]/div[2]/div[2]/div/table/tbody/tr/td[1]/div/span/div/div[2]/div/div/span/div/div')
             clipboard.copy(r'D:\Alan_Files\Kefu_Approval\pic\1111111111111111111111111.png')
@@ -278,6 +285,8 @@ class Comn:
                 # 输入申请原因
                 self.driver.find_elements_by_xpath('//div[@class="ant-pro-footer-bar"]//button')[1].click()
                 # 点击下一步
+                time.sleep(10)
+                self.driver.quit()
 
 if __name__ == '__main__':
     comn = Comn()
