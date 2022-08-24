@@ -14,11 +14,11 @@ class Comn:
     kefu  UI测试
     """
 
-    def __init__(self):
+    def __init__(self, pic_name):
         """
-        构造函数，创建对象的时候会执行
-        初始化浏览器
+        :param pic: 图片地址
         """
+        self.pic_name = pic_name
         self.driver = webdriver.Chrome()
         # self.name = '运营测试二零二二年零八月二二日一零时二五分零六秒'
         self.name = Creat_customers().post_creat(1) #测试时不开启
@@ -83,6 +83,7 @@ class Comn:
         :return:
         """
         self.register_crm()
+        # self.login()
         time.sleep(2)
         # self.driver.find_element_by_link_text('客户管理').click()
         # 跳转到客户管理
@@ -108,7 +109,7 @@ class Comn:
         # 进行必填输入
         # 先添加图片减少加载时间
         pic = self.driver.find_element_by_xpath('//span[@class="ant-upload"]')
-        clipboard.copy(r'D:\Alan_Files\Kefu_Approval\pic\1111111111111111111111111.png')
+        clipboard.copy(self.pic_name)
         ActionChains(self.driver).click(pic).perform()
         time.sleep(2)
         # 上传营业执照
@@ -120,7 +121,7 @@ class Comn:
         ):
             pass
         # 摁下黏贴
-        time.sleep(1)
+        # time.sleep(1)
         with kb.pressed(Key.enter):
             pass
         # 摁下回车,上传文件成功
@@ -245,7 +246,7 @@ class Comn:
             # 走流程 不需要在列表页面点
 
             pic = self.driver.find_element_by_xpath('//*[@id="base"]/div/div/div[6]/div[2]/div[2]/div/table/tbody/tr/td[1]/div/span/div/div[2]/div/div/span/div/div')
-            clipboard.copy(r'D:\Alan_Files\Kefu_Approval\pic\1111111111111111111111111.png')
+            clipboard.copy(self.pic_name)
 
             ActionChains(self.driver).move_to_element(pic).perform()
             ActionChains(self.driver).click(pic).perform()
@@ -288,8 +289,9 @@ class Comn:
                 time.sleep(10)
                 self.driver.quit()
 
+
 if __name__ == '__main__':
-    comn = Comn()
+    comn = Comn(pic_name="D:\Alan_Files\Kefu_Approval\pic\\1111111111111111111111111.png")
     # comn.register_crm()
     # comn.add_custmoer_name()
     # comn.replenish_info()
