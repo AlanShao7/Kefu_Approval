@@ -20,8 +20,8 @@ class Comn:
         初始化浏览器
         """
         self.driver = webdriver.Chrome()
-        self.name = '运营测试二零二二年零八月二二日一零时二五分零六秒'
-        # self.name = Creat_customers().post_creat(1) #测试时不开启
+        # self.name = '运营测试二零二二年零八月二二日一零时二五分零六秒'
+        self.name = Creat_customers().post_creat(1) #测试时不开启
 
     def login(self):
         """
@@ -47,6 +47,7 @@ class Comn:
         :return:
         """
         self.login()
+        time.sleep(2)
         self.driver.find_element_by_link_text('客户管理').click()
         # 跳转到客户管理
         self.driver.implicitly_wait(5)
@@ -81,7 +82,8 @@ class Comn:
         添加客户法定名称
         :return:
         """
-        self.login()
+        self.register_crm()
+        time.sleep(2)
         self.driver.find_element_by_link_text('客户管理').click()
         # 跳转到客户管理
         self.driver.implicitly_wait(5)
@@ -95,11 +97,15 @@ class Comn:
         self.driver.implicitly_wait(5)
         self.driver.find_element_by_xpath('//span[@class="ant-descriptions-item-content"]//input').send_keys(self.name)
         # 输入客保客户信息
+        time.sleep(1)
         self.driver.find_elements_by_xpath('//div[@class="ant-modal-footer"]/button')[1].click()
         # 点击确定
-        self.driver.implicitly_wait(5)
+        WebDriverWait(self.driver, 10, 0.5).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, '//span[@class="ant-upload"]'))
+        )
+        # 等待弹框出现
         # 进行必填输入
-
         # 先添加图片减少加载时间
         pic = self.driver.find_element_by_xpath('//span[@class="ant-upload"]')
         clipboard.copy(r'D:\Alan_Files\Kefu_Approval\pic\1111111111111111111111111.png')
@@ -108,7 +114,6 @@ class Comn:
         # 上传营业执照
         kb = Controller()
         # 实例化控制键盘
-        kb.pressed(Key.ctrl, 'v')
         with kb.pressed(
                 Key.ctrl,
                 'v'
@@ -116,7 +121,8 @@ class Comn:
             pass
         # 摁下黏贴
         time.sleep(1)
-        with kb.pressed(Key.enter): pass
+        with kb.pressed(Key.enter):
+            pass
         # 摁下回车,上传文件成功
 
         self.driver.find_element_by_xpath('//input[@id="operational_industry_id"]').click()
@@ -140,7 +146,7 @@ class Comn:
         self.driver.find_element_by_xpath('//input[@id="contactPhone"]').send_keys('17300000006')
         self.driver.find_element_by_xpath('//input[@id="email"]').send_keys('815@qq.com')
 
-        WebDriverWait(self.driver, 5, 0.5).until(
+        WebDriverWait(self.driver, 10, 0.5).until(
             EC.visibility_of_element_located(
                 (By.XPATH, '//img[@class="ant-image-img"]'))
         )
@@ -152,18 +158,19 @@ class Comn:
         完善企业信息
         :return:
         """
-        self.login()
-        self.driver.find_element_by_link_text('客户管理').click()
+        self.add_custmoer_name()
+        time.sleep(2)
+        # self.driver.find_element_by_link_text('客户管理').click()
         # 跳转到客户管理
         self.driver.implicitly_wait(5)
-        self.driver.find_element_by_xpath('//tbody[@class="ant-table-tbody"]/tr[3]/td[3]/a').click()
+        self.driver.find_element_by_xpath('//tbody[@class="ant-table-tbody"]/tr[2]/td[3]/a').click()
         # 进入完善企业信息页面
         time.sleep(1)
         self.driver.find_element_by_xpath('//input[@id="name"]').send_keys(self.name)
         time.sleep(1)
         self.driver.find_element_by_xpath('//span[@class="ant-pro-select-item-option-content-light"]').click()
         # 选择刚才创建的客户法定名称
-        WebDriverWait(self.driver, 5, 0.5).until(
+        WebDriverWait(self.driver, 10, 0.5).until(
             EC.visibility_of_element_located(
                 (By.XPATH, '//img[@class="ant-image-img"]'))
         )
@@ -175,14 +182,20 @@ class Comn:
         客户成功小结
         :return:
         """
-        self.login()
-        self.driver.find_element_by_link_text('客户管理').click()
+        self.replenish_info()
+        time.sleep(2)
+        # self.driver.find_element_by_link_text('客户管理').click()
         # self.driver.implicitly_wait(5)
         time.sleep(1)
         # 隐式等待5s
         self.driver.find_element_by_xpath('//tbody[@class="ant-table-tbody"]/tr[2]/td[last()]').click()
-        time.sleep(1)
+
+        WebDriverWait(self.driver, 10, 0.5).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, '//span[@class="ant-dropdown-menu-title-content"]'))
+        )
         self.driver.find_elements_by_xpath('//span[@class="ant-dropdown-menu-title-content"]')[0].click()
+        # 点击新价提单
         time.sleep(0.5)
         self.driver.find_element_by_xpath('//input[@id="customer_address"]').send_keys('地址')
         # 客户地址输入
@@ -210,20 +223,20 @@ class Comn:
         :return:
         """
         if x == 0 or x == 1:
-            self.login()
-            self.driver.find_element_by_link_text('客户管理').click()
+            self.customer_summary()
+            time.sleep(2)
+            # self.driver.find_element_by_link_text('客户管理').click()
             # self.driver.implicitly_wait(5)
             time.sleep(1)
             # 隐式等待5s
             self.driver.find_element_by_xpath('//tbody[@class="ant-table-tbody"]/tr[2]/td[last()]').click()
-            time.sleep(1)
+            time.sleep(2)
             # 点击操作按钮
             self.driver.find_elements_by_xpath('//span[@class="ant-dropdown-menu-title-content"]')[0].click()
             # 点击新价提单
+
             time.sleep(1)
 
-            kb = Controller()
-            # 实例化控制键盘
             pic = self.driver.find_element_by_xpath('//*[@id="base"]/div/div/div[6]/div[2]/div[2]/div/table/tbody/tr/td[1]/div/span/div/div[2]/div/div/span/div/div')
             clipboard.copy(r'D:\Alan_Files\Kefu_Approval\pic\1111111111111111111111111.png')
 
@@ -232,21 +245,27 @@ class Comn:
 
             time.sleep(2)
             # 上传营业执照
-            kb.pressed(Key.ctrl, 'v')
+            kb = Controller()
+            # 实例化控制键盘
+
             with kb.pressed(
                     Key.ctrl,
                     'v'
             ):
                 pass
-            time.sleep(10)
-            self.driver.quit()
             # 摁下黏贴
+            time.sleep(1)
+            with kb.pressed(Key.enter):
+                pass
+            # 摁下回车,上传文件成功
 
-            self.driver.find_element_by_xpath('//input[@id="base_contract_type"]').click()
+            contract_type = self.driver.find_element_by_xpath('//input[@id="base_contract_type"]')
+            ActionChains(self.driver).move_to_element(contract_type).perform()
+            contract_type.click()
             self.driver.implicitly_wait(5)
             self.driver.find_elements_by_xpath('//div[@class="rc-virtual-list-holder-inner"]/div')[x].click()
             # 选择非正常合同  除0外都是非正常合同
-            WebDriverWait(self.driver, 5, 0.5).until(
+            WebDriverWait(self.driver, 10, 0.5).until(
                 EC.visibility_of_element_located(
                     (By.XPATH, '//div[@class="ant-upload-list-item-info"]'))
             )
