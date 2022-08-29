@@ -52,11 +52,11 @@ class Comn:
         # 跳转到客户管理
         self.driver.implicitly_wait(5)
         # 隐式等待5s
-        self.driver.find_element_by_xpath('//div[@class="ant-pro-table-list-toolbar-left"]').click()
+        self.driver.find_element_by_xpath('//button[@class="ant-btn ant-btn-default ant-dropdown-trigger"]').click()
         # 点击更多操作
-        self.driver.implicitly_wait(5)
+        time.sleep(1)
         # 隐式等待5s
-        self.driver.find_elements_by_class_name('ant-dropdown-menu-item-only-child')[0].click()
+        self.driver.find_elements_by_xpath('//li[@class="ant-dropdown-menu-item ant-dropdown-menu-item-only-child"]')[0].click()
         # 点击注册账号
         self.driver.implicitly_wait(5)
         # 隐式等待5s
@@ -89,11 +89,11 @@ class Comn:
         # 跳转到客户管理
         self.driver.implicitly_wait(5)
         # 隐式等待5s
-        self.driver.find_element_by_xpath('//div[@class="ant-pro-table-list-toolbar-left"]').click()
+        self.driver.find_element_by_xpath('//button[@class="ant-btn ant-btn-default ant-dropdown-trigger"]').click()
         # 点击更多操作
         self.driver.implicitly_wait(5)
         # 隐式等待5s
-        self.driver.find_elements_by_class_name('ant-dropdown-menu-item-only-child')[1].click()
+        self.driver.find_elements_by_xpath('//li[@class="ant-dropdown-menu-item ant-dropdown-menu-item-only-child"]')[1].click()
         # 点击添加客户法定名称
         self.driver.implicitly_wait(5)
         self.driver.find_element_by_xpath('//span[@class="ant-descriptions-item-content"]//input').send_keys(self.name)
@@ -152,7 +152,13 @@ class Comn:
                 (By.XPATH, '//img[@class="ant-image-img"]'))
         )
         # 等待图片加载成功
+        time.sleep(1)
+        print('11111111111111111')
         self.driver.find_elements_by_xpath('//div[@class="ant-modal-footer"]/button')[1].click()
+        WebDriverWait(self.driver, 10, 0.5).until_not(
+            EC.visibility_of_element_located(
+                (By.XPATH, '//img[@class="ant-image-img"]'))
+        )
 
     def replenish_info(self):
         """
