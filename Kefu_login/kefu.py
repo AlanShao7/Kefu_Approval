@@ -29,6 +29,7 @@ class Comn:
         :return:
         """
         self.driver.get('https://kefu-test.weiwenjia.com/user/login/#/user/login')
+        self.driver.maximize_window()
         # 登录网站
         self.driver.implicitly_wait(5)
         # 隐式等待5s
@@ -48,13 +49,13 @@ class Comn:
         """
         self.login()
         time.sleep(2)
-        self.driver.find_element_by_link_text('客户管理').click()
-        # 跳转到客户管理
+        self.driver.get('https://kefu-test.weiwenjia.com/#/my/client/accountList')
+        #进入账号列表
         self.driver.implicitly_wait(5)
         # 隐式等待5s
         self.driver.find_element_by_xpath('//button[@class="ant-btn ant-btn-default ant-dropdown-trigger"]').click()
         # 点击更多操作
-        time.sleep(1)
+        time.sleep(3)
         # 隐式等待5s
         self.driver.find_elements_by_xpath('//li[@class="ant-dropdown-menu-item ant-dropdown-menu-item-only-child"]')[0].click()
         # 点击注册账号
@@ -242,19 +243,16 @@ class Comn:
             self.customer_summary()
             self.driver.implicitly_wait(5)
             self.driver.refresh()
-            time.sleep(5)
-            # self.driver.find_element_by_link_text('客户管理').click()
-            # self.driver.find_element_by_xpath('//tbody[@class="ant-table-tbody"]/tr[2]/td[last()]').click()
-            # time.sleep(2)
-            # 点击操作按钮
-            # self.driver.find_elements_by_xpath('//span[@class="ant-dropdown-menu-title-content"]')[0].click()
-            # 点击新价提单
-            # 走流程 不需要在列表页面点
+            time.sleep(3)
 
-            pic = self.driver.find_element_by_xpath('//*[@id="base"]/div/div/div[6]/div[2]/div[2]/div/table/tbody/tr/td[1]/div/span/div/div[2]/div/div/span/div/div')
+            pic = self.driver.find_elements_by_xpath("//button[@class='ant-btn ant-btn-default']")[0]
             clipboard.copy(self.pic_name)
+            print(self.pic_name)
 
-            ActionChains(self.driver).move_to_element(pic).perform()
+            js = "var q=document.documentElement.scrollTop=10000"  # documentElement表示获取根节点元素
+            self.driver.execute_script(js)  # 定位到页面底部
+            time.sleep(3)
+
             ActionChains(self.driver).click(pic).perform()
 
             time.sleep(2)
